@@ -1,10 +1,12 @@
 package api
 
 import (
-	"net/http"
-
 	"github.com/evgborovoy/StandardWebServer/storage"
 	"github.com/sirupsen/logrus"
+)
+
+var (
+	prefix = "api/v1"
 )
 
 // пытаемся отконфигурировать наш API instance (поле logger)
@@ -19,9 +21,12 @@ func (a *API) configureLoggerField() error {
 
 // Пытаемся отконфигурировать наш маршрутизатор (поле router)
 func (a *API) configureRouterField() {
-	a.router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, I'm work!"))
-	})
+	a.router.HandleFunc(prefix+"/articles", a.GetAllArticles).Methods("GET")
+	a.router.HandleFunc(prefix+"/articles/{id}", a.GetArticleById).Methods("GET")
+	a.router.HandleFunc(prefix+"/articles/{id}", a.DeletearticleById).Methods("DELETE")
+	a.router.HandleFunc(prefix+"/articles", a.PostArticle).Methods("POST")
+	a.router.HandleFunc(prefix+"/users/register", a.PostUserRegister).Methods("POSt")
+
 }
 
 // Пытаемся отконфигурировать базу данных (поле storage)
