@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	prefix = "api/v1"
+	prefix = "/api/v1"
 )
 
 // пытаемся отконфигурировать наш API instance (поле logger)
@@ -23,7 +23,7 @@ func (a *API) configureLoggerField() error {
 func (a *API) configureRouterField() {
 	a.router.HandleFunc(prefix+"/articles", a.GetAllArticles).Methods("GET")
 	a.router.HandleFunc(prefix+"/articles/{id}", a.GetArticleById).Methods("GET")
-	a.router.HandleFunc(prefix+"/articles/{id}", a.DeletearticleById).Methods("DELETE")
+	a.router.HandleFunc(prefix+"/articles/{id}", a.DeleteArticleById).Methods("DELETE")
 	a.router.HandleFunc(prefix+"/articles", a.PostArticle).Methods("POST")
 	a.router.HandleFunc(prefix+"/users/register", a.PostUserRegister).Methods("POSt")
 

@@ -12,14 +12,12 @@ type ArticleRepository struct {
 }
 
 var (
-	tableArticle = "article"
+	tableArticle = "articles"
 )
 
 // Добавить статью в БД
 func (ar *ArticleRepository) Create(article *models.Article) (*models.Article, error) {
-	query := fmt.Sprintf(
-		"INSERT INTO %s (title, author, content) VALUES($1, $2, $3) RETURNING id",
-		tableArticle)
+	query := fmt.Sprintf("INSERT INTO %s (title, author, content) VALUES($1, $2, $3) RETURNING id", tableArticle)
 	if err := ar.storage.db.QueryRow(
 		query,
 		article.Title,

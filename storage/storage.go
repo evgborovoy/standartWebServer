@@ -7,9 +7,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// DataBase file descriptor
 type Storage struct {
-	config *Config
-	// DataBase file descriptor
+	config            *Config
 	db                *sql.DB
 	userRepository    *UserRepository
 	articleRepository *ArticleRepository
@@ -44,7 +44,7 @@ func (s *Storage) User() *UserRepository {
 	s.userRepository = &UserRepository{
 		storage: s,
 	}
-	return nil
+	return s.userRepository
 }
 
 func (s *Storage) Article() *ArticleRepository {
@@ -54,5 +54,5 @@ func (s *Storage) Article() *ArticleRepository {
 	s.articleRepository = &ArticleRepository{
 		storage: s,
 	}
-	return nil
+	return s.articleRepository
 }
