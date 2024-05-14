@@ -1,6 +1,9 @@
 package api
 
 import (
+	"net/http"
+
+	"github.com/evgborovoy/StandardWebServer/internal/app/middleware"
 	"github.com/evgborovoy/StandardWebServer/storage"
 	"github.com/sirupsen/logrus"
 )
@@ -22,10 +25,17 @@ func (a *API) configureLoggerField() error {
 // Пытаемся отконфигурировать наш маршрутизатор (поле router)
 func (a *API) configureRouterField() {
 	a.router.HandleFunc(prefix+"/articles", a.GetAllArticles).Methods("GET")
-	a.router.HandleFunc(prefix+"/articles/{id}", a.GetArticleById).Methods("GET")
+	// before JWT
+	// a.router.HandleFunc(prefix+"/articles/{id}", a.GetArticleById).Methods("GET")
+	// after JWT
+	a.router.Handle(prefix+"/articles/{id}", middleware.JwtMiddleware.Handler(
+		http.HandlerFunc(a.GetArticleById),
+	)).Methods("GET")
+
 	a.router.HandleFunc(prefix+"/articles/{id}", a.DeleteArticleById).Methods("DELETE")
 	a.router.HandleFunc(prefix+"/articles", a.PostArticle).Methods("POST")
-	a.router.HandleFunc(prefix+"/users/register", a.PostUserRegister).Methods("POSt")
+	a.router.HandleFunc(prefix+"/users/register", a.PostUserRegister).Methods("POST")
+	a.router.HandleFunc(prefix+"/users/auth", a.PostUserAuth).Methods("POST")
 
 }
 
